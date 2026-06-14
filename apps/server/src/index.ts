@@ -1,33 +1,27 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { PrismaClient } from '@prisma/client';
+import authRoutes from './routes/auth.routes';
 
 const app = express();
 const prisma = new PrismaClient();
 const PORT = 5000;
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.send('AcademicQuest API is running');
 });
 
-// Create a new user
-app.post('/api/users', async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-    const user = await prisma.user.create({
-      data: { username, email, password },
-    });
-    res.status(201).json(user);
-  } catch (error) {
-    res.status(400).json({ error: 'Failed to create user', details: error });
-  }
-});
+app.use('/api/auth', authRoutes);
 
-// Get all users
+// Get all users (for testing)
 app.get('/api/users', async (req, res) => {
   try {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      select: { id: true, username: true, email: true, xp: true, level: true, createdAt: true },
+    });
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch users' });
