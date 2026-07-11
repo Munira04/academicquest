@@ -25,6 +25,8 @@
     "packages/*"
   ],
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "@prisma/client": "^5.22.0",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "jsonwebtoken": "^9.0.3"
